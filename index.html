@@ -7,155 +7,164 @@
     <title>青莲剑客下载站 - 核心资源</title>
     <style>
         :root {
-            --cyan: #00f2ff;
-            --blue: #0062ff;
-            --bg-dark: #070914;
-            --glass: rgba(255, 255, 255, 0.05);
+            --blue: #2a2eff;    /* 浓郁深蓝 */
+            --purple: #8a2be2;  /* 极光紫 */
+            --cyan: #00f2ff;    /* 霓虹青 */
+            --bg-dark: #030512; /* 深夜底色 */
         }
 
-        /* 动态极光背景 */
+        /* 动态浓郁色彩背景 */
         body {
             margin: 0; padding: 30px 15px;
             background: var(--bg-dark);
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             color: #fff;
             min-height: 100vh;
             display: flex; flex-direction: column; align-items: center;
             overflow-x: hidden;
-            /* 背景装饰：填补两边空洞 */
+            /* 背景装饰：填补两边空洞，色彩更蓝更紫 */
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 98, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 10% 20%, rgba(42, 46, 255, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
                 linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
         }
 
-        /* 微信专供按钮 */
+        /* 微信专供：浓郁渐变按钮 */
         #wechat-nav {
-            display: none; width: 100%; max-width: 600px;
+            display: none; width: 100%; max-width: 620px;
             margin-bottom: 25px;
             animation: slideDown 0.4s ease;
         }
         .share-btn {
-            width: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan));
-            border: none; color: white; padding: 16px; border-radius: 12px;
-            font-weight: 700; font-size: 14px; cursor: pointer;
-            box-shadow: 0 5px 25px rgba(0, 242, 255, 0.3);
+            width: 100%; background: linear-gradient(90deg, var(--blue), var(--purple));
+            border: none; color: white; padding: 18px; border-radius: 15px;
+            font-weight: 800; font-size: 15px; cursor: pointer;
+            box-shadow: 0 5px 25px rgba(138, 43, 226, 0.4);
             letter-spacing: 1px;
         }
 
-        /* 全息透明容器 */
+        /* 深色磨砂容器 */
         .container {
-            width: 100%; max-width: 600px;
-            background: var(--glass);
+            width: 100%; max-width: 620px;
+            background: rgba(10, 12, 30, 0.6);
             backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 35px; overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
             position: relative;
         }
 
-        /* 顶部科技条 */
+        /* 顶部蓝紫流光条 */
         .container::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--blue), var(--purple), var(--cyan));
         }
 
         .header {
-            padding: 50px 20px 30px; text-align: center;
+            padding: 50px 20px 35px; text-align: center;
         }
         .header h1 {
-            margin: 0; font-size: 26px; font-weight: 800;
+            margin: 0; font-size: 28px; font-weight: 800;
             letter-spacing: 4px; color: #fff;
-            text-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+            background: linear-gradient(to bottom, #fff, #b9beff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .header p { 
             margin: 12px 0 0; font-size: 10px; font-family: monospace; 
-            color: var(--cyan); letter-spacing: 5px; opacity: 0.8;
+            color: var(--purple); letter-spacing: 5px; font-weight: bold;
         }
 
         .file-list { padding: 10px; list-style: none; margin: 0; }
         
-        /* 统一的文件列表项 */
         .file-item {
-            background: rgba(255, 255, 255, 0.02); margin: 10px;
-            padding: 20px 24px; border-radius: 16px;
+            background: rgba(255, 255, 255, 0.02); margin: 12px;
+            padding: 22px 26px; border-radius: 20px;
             display: flex; justify-content: space-between; align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .file-item:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(0, 242, 255, 0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--blue);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
-        .file-info { display: flex; align-items: center; }
+        /* 修正图标对齐的容器 */
+        .file-info { display: flex; align-items: center; justify-content: center; }
         
-        /* 统一的高级几何图标 */
+        /* 统一菱形图标：修正手机偏移 */
         .file-icon-box {
             width: 10px; height: 10px; 
-            background: var(--cyan);
+            background: var(--blue);
             margin-right: 20px;
-            transform: rotate(45deg); /* 菱形造型 */
-            box-shadow: 0 0 10px var(--cyan);
-            animation: pulse 2s infinite;
+            flex-shrink: 0; /* 防止手机端被挤压 */
+            transform: rotate(45deg);
+            box-shadow: 0 0 15px var(--blue);
+            animation: pulseColor 3s infinite;
         }
-        @keyframes pulse {
-            0% { opacity: 0.5; box-shadow: 0 0 5px var(--cyan); }
-            50% { opacity: 1; box-shadow: 0 0 15px var(--cyan); }
-            100% { opacity: 0.5; box-shadow: 0 0 5px var(--cyan); }
+        @keyframes pulseColor {
+            0%, 100% { background: var(--blue); box-shadow: 0 0 10px var(--blue); }
+            50% { background: var(--purple); box-shadow: 0 0 20px var(--purple); }
         }
 
-        .file-name { font-size: 15px; font-weight: 500; color: #e0e0e0; letter-spacing: 0.5px; }
+        .file-name { font-size: 16px; font-weight: 600; color: #f0f0f0; letter-spacing: 0.5px; }
 
-        /* 纯色高级感按钮 */
+        /* 蓝紫渐变下载按钮 */
         .download-btn {
-            background: transparent;
-            color: var(--cyan); 
-            padding: 8px 22px; 
-            border-radius: 8px;
-            font-size: 12px; font-weight: 700; text-decoration: none;
-            border: 1px solid var(--cyan);
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            color: #fff; 
+            padding: 10px 25px; 
+            border-radius: 12px;
+            font-size: 13px; font-weight: 800; text-decoration: none;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(42, 46, 255, 0.3);
         }
         .download-btn:hover { 
-            background: var(--cyan); 
-            color: #000; 
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5);
         }
 
-        /* 微信引导弹窗 */
+        /* 微信引导弹窗：蓝紫配色 */
         #guide-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); z-index: 1000; backdrop-filter: blur(15px);
+            background: rgba(3, 5, 18, 0.95); z-index: 1000; backdrop-filter: blur(20px);
             justify-content: center; align-items: center;
         }
         .guide-box {
-            width: 80%; max-width: 350px; background: #0f1225; border: 1px solid var(--cyan);
-            border-radius: 24px; padding: 40px 20px; text-align: center; position: relative;
+            width: 85%; max-width: 380px; background: #0c0e24; border: 1px solid var(--purple);
+            border-radius: 30px; padding: 45px 25px; text-align: center; position: relative;
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
         }
-        .guide-arrow { position: absolute; top: -45px; right: 20px; font-size: 40px; color: var(--cyan); animation: bounce 1s infinite; }
+        .guide-arrow { position: absolute; top: -50px; right: 25px; font-size: 45px; color: var(--purple); animation: bounce 1s infinite; }
 
-        .footer { padding: 30px; text-align: center; font-size: 9px; color: rgba(255,255,255,0.2); font-family: monospace; letter-spacing: 4px; }
+        .footer { padding: 35px; text-align: center; font-size: 9px; color: rgba(255,255,255,0.25); font-family: monospace; letter-spacing: 5px; }
 
         @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
+        /* 手机端深度适配 */
         @media (max-width: 600px) {
-            .file-item { flex-direction: column; text-align: center; gap: 18px; padding: 25px; }
-            .download-btn { width: 100%; }
-            .file-icon-box { margin-right: 0; margin-bottom: 12px; }
+            .file-item { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 20px; 
+                padding: 30px 20px; 
+            }
+            .download-btn { width: 100%; padding: 14px 0; }
+            .file-info { flex-direction: column; } /* 手机端图标在文字上方 */
+            .file-icon-box { margin-right: 0; margin-bottom: 15px; } /* 修正手机间距 */
+            .file-name { font-size: 17px; }
+            .header h1 { font-size: 24px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 微信动作按钮 -->
+    <!-- 微信环境下才会显示的动作按钮 -->
     <div id="wechat-nav">
         <button class="share-btn" onclick="copyStationLink()">🚀 网址已复制，点此去浏览器打开下载</button>
     </div>
@@ -163,7 +172,7 @@
     <div class="container">
         <div class="header">
             <h1>青莲剑客下载站</h1>
-            <p>QUANTUM_CORE // DATA_V5.1</p>
+            <p>PHANTOM_DEEP // DATA_V6.0</p>
         </div>
 
         <ul class="file-list" id="fileList">
@@ -171,7 +180,7 @@
         </ul>
 
         <div class="footer">
-            CONNECTED // STABLE_STRENGTH_100%
+            ENCRYPTED_SIGNAL // LINK_VIBRANT_100%
         </div>
     </div>
 
@@ -179,13 +188,14 @@
     <div id="guide-overlay" onclick="this.style.display='none'">
         <div class="guide-box">
             <div class="guide-arrow">↗</div>
-            <h2 style="color: #fff; font-size: 18px; margin-bottom: 10px;">微信环境下载受限</h2>
-            <p style="color: #888; font-size: 13px; line-height: 1.8;">
-                请点击右上角 <strong style="color:var(--cyan)">三个点</strong><br>
-                选择 <strong style="color:var(--cyan)">在浏览器打开</strong><br>
-                即可直接开始高速下载
+            <h2 style="color: #fff; font-size: 20px; margin-bottom: 15px;">环境下载受限提示</h2>
+            <p style="color: #aaa; font-size: 14px; line-height: 1.8;">
+                微信禁止直接下载资源文件。<br><br>
+                1. 点击右上角 <strong style="color:var(--purple)">三个点</strong><br>
+                2. 选择 <strong style="color:var(--blue)">在浏览器打开</strong><br>
+                即可开始极速下载
             </p>
-            <button style="margin-top: 20px; background: var(--cyan); border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; cursor: pointer;">确定</button>
+            <button style="margin-top: 25px; background: linear-gradient(90deg, var(--blue), var(--purple)); border: none; padding: 12px 45px; border-radius: 12px; font-weight: bold; color: white; cursor: pointer;">知道了</button>
         </div>
     </div>
 
@@ -197,6 +207,7 @@
             { name: "OpenSpeedy", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/OpenSpeedy/OpenSpeedy.zip" },
         ];
 
+        // 识别微信
         const isWechat = /MicroMessenger/i.test(navigator.userAgent);
         if (isWechat) {
             document.getElementById('wechat-nav').style.display = 'block';
@@ -233,7 +244,7 @@
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
-            alert("🚀 站点网址已成功复制！\n请打开手机浏览器（如 Safari 或 Chrome）粘贴访问。");
+            alert("🚀 站点网址已成功复制到剪贴板！\n请粘贴到手机浏览器（如 Safari 或 Chrome）访问。");
         }
     </script>
 </body>
