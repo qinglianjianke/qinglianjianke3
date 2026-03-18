@@ -134,4 +134,142 @@
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; color: #fff;
             font-weight: 900; font-size: 15px; letter-spacing: 2px;
-            border: none; position: relative; over
+            border: none; position: relative; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(112, 0, 255, 0.4);
+            transition: 0.3s;
+        }
+
+        .download-btn::before {
+            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: btnScan 3s infinite;
+        }
+
+        @keyframes btnScan { 0% { left: -100%; } 40%, 100% { left: 100%; } }
+
+        #wechat-guide {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 9999; backdrop-filter: blur(15px);
+        }
+
+        .footer { padding: 40px; text-align: center; font-size: 10px; color: var(--cyan); opacity: 0.3; letter-spacing: 4px; }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+    <div class="grid-3d"></div>
+
+    <header class="header">
+        <div class="main-logo-wrapper" id="mainLogo"></div>
+        <h1>青莲剑客下载站</h1>
+    </header>
+
+    <div id="wechat-guide" onclick="this.style.display='none'">
+        <div style="position: absolute; top: 20px; right: 30px; color: var(--cyan); text-align: right;">
+            <div style="font-size: 40px; animation: bounce 1s infinite;">↗</div>
+            <div style="color:#fff; margin-top: 15px;">请点击右上角三个点<br>选择“在浏览器打开”</div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div id="fileList"></div>
+    </main>
+
+    <div class="footer">STATION_V6.1 // CORE_ENCRYPTED</div>
+
+    <script>
+        // 1. 动态粒子
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.color = Math.random() > 0.5 ? '#00f2ff' : '#ff85a1';
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        function createParticles() { for (let i = 0; i < 70; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas(); createParticles(); animate();
+
+        // 2. 核心青莲剑 SVG 图标 (增加粉白配色体现青莲)
+        const getSwordSvg = (size) => `
+            <svg style="width:${size}px; height:${size}px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- 剑身 (翡翠青到极光蓝) -->
+                <defs>
+                    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00ffa3; stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#00f2ff; stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path d="M50 5 L56 30 L53 75 L47 75 L44 30 Z" fill="url(#bladeGrad)" />
+                <path d="M50 10 L52 70 L48 70 Z" fill="rgba(255,255,255,0.6)" /> <!-- 剑脊亮线 -->
+
+                <!-- 莲花剑格 (体现青莲二字：粉白配色) -->
+                <!-- 中心花瓣 -->
+                <path d="M50 65 Q55 55 60 65 Q60 75 50 72 Q40 75 40 65 Q45 55 50 65" fill="#ffffff" />
+                <!-- 侧翼粉色花瓣 -->
+                <path d="M40 65 Q30 60 35 75 Q40 82 50 75" fill="#ff85a1" />
+                <path d="M60 65 Q70 60 65 75 Q60 82 50 75" fill="#ff85a1" />
+
+                <!-- 剑柄 -->
+                <rect x="47" y="75" width="6" height="15" rx="3" fill="#ffffff" />
+                <rect x="47" y="80" width="6" height="2" fill="#00f2ff" />
+            </svg>
+        `;
+
+        // 3. 渲染
+        document.getElementById('mainLogo').innerHTML = getSwordSvg(80);
+
+        const files = [
+            { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
+            { name: "Visual C++6.0 (极速)", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/VC6.0/Visual.C++6.0.zip" },
+            { name: "STM32入门资料包 (1.5G)", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/STM32/STM32.zip" },
+            { name: "OpenSpeedy 工具", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/OpenSpeedy/OpenSpeedy.zip" }
+        ];
+
+        const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+        const listEl = document.getElementById('fileList');
+
+        files.forEach(file => {
+            const card = document.createElement('div');
+            card.className = 'file-card';
+            card.innerHTML = `
+                <div class="file-title-wrapper">
+                    ${getSwordSvg(32)}
+                    <div class="file-name">${file.name}</div>
+                </div>
+                <a href="${file.link}" class="download-btn" onclick="handleDl(event, this)">DOWNLOAD</a>
+            `;
+            listEl.appendChild(card);
+        });
+
+        function handleDl(e, btn) {
+            if (isWechat) {
+                e.preventDefault();
+                document.getElementById('wechat-guide').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
