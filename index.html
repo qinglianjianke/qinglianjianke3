@@ -9,10 +9,12 @@
         :root {
             --cyan: #00f2ff;
             --purple: #7000ff;
-            --pink: #ff00d0;
+            --lotus-pink: #ff85a1; /* 莲花粉 */
+            --lotus-white: #ffffff;
+            --jade-green: #00ffa3; /* 翡翠青 */
         }
 
-        /* 1. 动态画布背景：解决空洞 */
+        /* 1. 背景系统 */
         body {
             margin: 0; padding: 0;
             background: #02040f;
@@ -39,31 +41,40 @@
             perspective: 1000px;
             transform: rotateX(60deg) translateY(-20%) translateZ(-200px);
             mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5), transparent);
-            opacity: 0.2;
+            opacity: 0.25;
             animation: gridMove 10s linear infinite;
         }
 
-        @keyframes gridMove {
-            from { background-position: 0 0; }
-            to { background-position: 0 60px; }
-        }
+        @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 60px; } }
 
-        /* 2. 标题栏 */
+        /* 2. 顶部 Logo 与 标题 */
         .header {
             width: 100%;
-            padding: calc(60px + env(safe-area-inset-top)) 0 30px;
+            padding: calc(40px + env(safe-area-inset-top)) 0 30px;
             text-align: center;
             z-index: 10;
         }
+
+        /* 主 Logo 样式 */
+        .main-logo-wrapper {
+            margin-bottom: 15px;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--cyan));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
         .header h1 {
-            font-size: 32px; font-weight: 900; letter-spacing: 5px;
-            background: linear-gradient(135deg, #fff 30%, var(--cyan));
+            font-size: 28px; font-weight: 900; letter-spacing: 4px;
+            background: linear-gradient(135deg, #fff 40%, var(--lotus-pink));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px var(--cyan));
             margin: 0;
         }
 
-        /* 3. 核心卡片 */
+        /* 3. 资源卡片布局 */
         .main-content {
             width: 100%; max-width: 550px;
             padding: 0 20px 100px;
@@ -76,7 +87,7 @@
             background: rgba(255, 255, 255, 0.04);
             margin-bottom: 35px;
             border-radius: 30px;
-            padding: 35px 25px;
+            padding: 30px 20px;
             border: 1px solid rgba(0, 242, 255, 0.2);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
@@ -84,189 +95,43 @@
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 流光边框 */
         .file-card::after {
             content: ""; position: absolute; inset: -1px; border-radius: 30px;
             padding: 2px;
-            background: linear-gradient(135deg, var(--cyan), transparent, var(--purple), transparent, var(--pink));
+            background: linear-gradient(135deg, var(--lotus-pink), transparent, var(--jade-green), transparent, var(--cyan));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask-composite: exclude;
             background-size: 200% 200%;
-            animation: flowBorder 6s linear infinite;
+            animation: flowBorder 8s linear infinite;
         }
 
-        @keyframes flowBorder {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 200%; }
-        }
+        @keyframes flowBorder { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
 
-        /* 名字区域：剑图标对齐 */
+        /* 名字对齐区域 */
         .file-title-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 25px; width: 100%;
         }
 
-        /* 青莲剑 SVG 图标样式 */
+        /* 青莲剑 SVG 样式 */
         .sword-icon {
             width: 32px; height: 32px;
-            margin-right: 15px;
-            filter: drop-shadow(0 0 8px var(--cyan));
-            animation: swordGlow 2s infinite alternate;
-        }
-
-        @keyframes swordGlow {
-            from { filter: drop-shadow(0 0 5px var(--cyan)); opacity: 0.7; }
-            to { filter: drop-shadow(0 0 15px var(--cyan)); opacity: 1; }
+            margin-right: 12px;
+            filter: drop-shadow(0 0 5px var(--jade-green));
         }
 
         .file-name {
-            font-size: 20px; font-weight: 700; color: #fff;
-            letter-spacing: 1px;
+            font-size: 19px; font-weight: 700; color: #fff;
             text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
         }
 
-        /* 4. 按钮 */
+        /* 按钮样式 */
         .download-btn {
-            width: 90%; height: 58px;
-            background: linear-gradient(90deg, var(--purple), var(--cyan));
-            border-radius: 20px;
+            width: 85%; height: 55px;
+            background: linear-gradient(90deg, var(--purple), var(--eblue, #2563EB));
+            background-image: linear-gradient(90deg, var(--purple), var(--cyan));
+            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; color: #fff;
-            font-weight: 900; font-size: 16px; letter-spacing: 2px;
-            border: none; position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(112, 0, 255, 0.4);
-            transition: 0.3s;
-        }
-
-        .download-btn::before {
-            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            animation: btnScan 2.5s infinite;
-        }
-
-        @keyframes btnScan {
-            0% { left: -100%; } 40%, 100% { left: 100%; }
-        }
-
-        .download-btn:active { transform: scale(0.94); }
-
-        #wechat-guide {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 9999; backdrop-filter: blur(15px);
-        }
-        
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        .footer { padding: 40px; text-align: center; font-size: 10px; color: var(--cyan); opacity: 0.3; letter-spacing: 3px; }
-
-    </style>
-</head>
-<body>
-
-    <canvas id="particle-canvas"></canvas>
-    <div class="grid-3d"></div>
-
-    <header class="header">
-        <h1>青莲剑客下载站</h1>
-    </header>
-
-    <div id="wechat-guide" onclick="this.style.display='none'">
-        <div style="position: absolute; top: 20px; right: 30px; color: var(--cyan); text-align: right;">
-            <div style="font-size: 50px; animation: bounce 1s infinite;">↗</div>
-            <div style="color:#fff; margin-top: 15px;">请点击右上角三个点<br>选择“在浏览器打开”</div>
-        </div>
-    </div>
-
-    <main class="main-content">
-        <div id="fileList"></div>
-    </main>
-
-    <div class="footer">STATION_ENCRYPTED // LINK_STABLE</div>
-
-    <script>
-        // 1. 动态粒子系统
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.color = Math.random() > 0.5 ? '#00f2ff' : '#7000ff';
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-        function createParticles() { for (let i = 0; i < 70; i++) particles.push(new Particle()); }
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        window.addEventListener('resize', initCanvas);
-        initCanvas(); createParticles(); animate();
-
-        // 2. 青莲剑 SVG 图标 HTML
-        const swordSvg = `
-            <svg class="sword-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <!-- 剑身 -->
-                <path d="M50 10 L55 30 L53 80 L47 80 L45 30 Z" fill="#00f2ff" />
-                <!-- 莲花剑格 -->
-                <path d="M40 75 Q50 65 60 75 Q60 85 50 82 Q40 85 40 75" fill="#fff" />
-                <path d="M42 78 Q50 72 58 78" fill="none" stroke="#00f2ff" stroke-width="2" />
-                <!-- 剑柄 -->
-                <rect x="48" y="82" width="4" height="12" rx="2" fill="#fff" />
-                <!-- 剑尖电光 -->
-                <circle cx="50" cy="8" r="1.5" fill="#fff" />
-            </svg>
-        `;
-
-        // 3. 渲染
-        const files = [
-            { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
-            { name: "Visual C++6.0 (极速)", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/VC6.0/Visual.C++6.0.zip" },
-            { name: "STM32入门资料包 (1.5G)", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/STM32/STM32.zip" },
-            { name: "OpenSpeedy 工具", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/OpenSpeedy/OpenSpeedy.zip" }
-        ];
-
-        const isWechat = /MicroMessenger/i.test(navigator.userAgent);
-        const listEl = document.getElementById('fileList');
-
-        files.forEach(file => {
-            const card = document.createElement('div');
-            card.className = 'file-card';
-            card.innerHTML = `
-                <div class="file-title-wrapper">
-                    ${swordSvg}
-                    <div class="file-name">${file.name}</div>
-                </div>
-                <a href="${file.link}" class="download-btn" onclick="handleDl(event, this)">DOWNLOAD</a>
-            `;
-            listEl.appendChild(card);
-        });
-
-        function handleDl(e, btn) {
-            if (isWechat) {
-                e.preventDefault();
-                document.getElementById('wechat-guide').style.display = 'block';
-            } else {
-                btn.innerText = 'PREPARING...';
-            }
-        }
-    </script>
-</body>
-</html>
+            font-weight: 900; font-size: 15px; letter-spacing: 2px;
+            border: none; position: relative; over
