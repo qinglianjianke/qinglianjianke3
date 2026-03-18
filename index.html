@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="icon" href="mine.jpg" type="image/jpeg">
-    <title>青莲剑客下载站 - 量子核心</title>
+    <title>青莲剑客下载站 - 剑指核心</title>
     <style>
         :root {
             --cyan: #00f2ff;
             --purple: #7000ff;
             --pink: #ff00d0;
-            --deep-blue: #050a24;
         }
 
-        /* 1. 动态画布背景：解决死黑空洞 */
+        /* 1. 动态画布背景：解决空洞 */
         body {
             margin: 0; padding: 0;
             background: #02040f;
@@ -30,7 +29,6 @@
             background: radial-gradient(circle at 50% 50%, #0a113a 0%, #02040f 100%);
         }
 
-        /* 3D 视角网格 */
         .grid-3d {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
@@ -41,7 +39,7 @@
             perspective: 1000px;
             transform: rotateX(60deg) translateY(-20%) translateZ(-200px);
             mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5), transparent);
-            opacity: 0.15;
+            opacity: 0.2;
             animation: gridMove 10s linear infinite;
         }
 
@@ -50,10 +48,10 @@
             to { background-position: 0 60px; }
         }
 
-        /* 2. 悬浮标题：全息发光 */
+        /* 2. 标题栏 */
         .header {
             width: 100%;
-            padding: calc(60px + env(safe-area-inset-top)) 0 40px;
+            padding: calc(60px + env(safe-area-inset-top)) 0 30px;
             text-align: center;
             z-index: 10;
         }
@@ -64,13 +62,8 @@
             filter: drop-shadow(0 0 15px var(--cyan));
             margin: 0;
         }
-        .header p { 
-            font-size: 10px; color: var(--cyan); letter-spacing: 4px; 
-            margin-top: 10px; opacity: 0.8;
-            text-transform: uppercase;
-        }
 
-        /* 3. 全息玻璃卡片：解决“不高级”感 */
+        /* 3. 核心卡片 */
         .main-content {
             width: 100%; max-width: 550px;
             padding: 0 20px 100px;
@@ -83,17 +76,15 @@
             background: rgba(255, 255, 255, 0.04);
             margin-bottom: 35px;
             border-radius: 30px;
-            padding: 40px 30px;
+            padding: 35px 25px;
             border: 1px solid rgba(0, 242, 255, 0.2);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            box-shadow: 
-                0 20px 50px rgba(0,0,0,0.5),
-                inset 0 0 20px rgba(0, 242, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 卡片边缘的流光扫动 */
+        /* 流光边框 */
         .file-card::after {
             content: ""; position: absolute; inset: -1px; border-radius: 30px;
             padding: 2px;
@@ -109,13 +100,35 @@
             100% { background-position: 200% 200%; }
         }
 
+        /* 名字区域：剑图标对齐 */
+        .file-title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        /* 青莲剑 SVG 图标样式 */
+        .sword-icon {
+            width: 32px; height: 32px;
+            margin-right: 15px;
+            filter: drop-shadow(0 0 8px var(--cyan));
+            animation: swordGlow 2s infinite alternate;
+        }
+
+        @keyframes swordGlow {
+            from { filter: drop-shadow(0 0 5px var(--cyan)); opacity: 0.7; }
+            to { filter: drop-shadow(0 0 15px var(--cyan)); opacity: 1; }
+        }
+
         .file-name {
             font-size: 20px; font-weight: 700; color: #fff;
-            margin-bottom: 30px; letter-spacing: 1px;
+            letter-spacing: 1px;
             text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
         }
 
-        /* 4. 能量核心按钮 */
+        /* 4. 按钮 */
         .download-btn {
             width: 90%; height: 58px;
             background: linear-gradient(90deg, var(--purple), var(--cyan));
@@ -135,17 +148,17 @@
         }
 
         @keyframes btnScan {
-            0% { left: -100%; }
-            40%, 100% { left: 100%; }
+            0% { left: -100%; } 40%, 100% { left: 100%; }
         }
 
-        .download-btn:active { transform: scale(0.94); filter: brightness(1.2); }
+        .download-btn:active { transform: scale(0.94); }
 
-        /* 微信专用引导 */
         #wechat-guide {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 9999; backdrop-filter: blur(15px);
         }
+        
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
         .footer { padding: 40px; text-align: center; font-size: 10px; color: var(--cyan); opacity: 0.3; letter-spacing: 3px; }
 
@@ -153,13 +166,11 @@
 </head>
 <body>
 
-    <!-- 填补黑色的粒子系统和 3D 网格 -->
     <canvas id="particle-canvas"></canvas>
     <div class="grid-3d"></div>
 
     <header class="header">
         <h1>青莲剑客下载站</h1>
-        <p>Quantum Data Node // System v7.0</p>
     </header>
 
     <div id="wechat-guide" onclick="this.style.display='none'">
@@ -173,67 +184,58 @@
         <div id="fileList"></div>
     </main>
 
-    <div class="footer">QUANTUM_STATION_ENCRYPTED</div>
+    <div class="footer">STATION_ENCRYPTED // LINK_STABLE</div>
 
     <script>
-        // 1. 核心粒子系统：解决“不高级、光效不明显”
+        // 1. 动态粒子系统
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
                 this.color = Math.random() > 0.5 ? '#00f2ff' : '#7000ff';
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
             }
             draw() {
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
-
-        function createParticles() {
-            for (let i = 0; i < 60; i++) {
-                particles.push(new Particle());
-            }
-        }
-
+        function createParticles() { for (let i = 0; i < 70; i++) particles.push(new Particle()); }
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
-
         window.addEventListener('resize', initCanvas);
-        initCanvas();
-        createParticles();
-        animate();
+        initCanvas(); createParticles(); animate();
 
-        // 2. 列表渲染
+        // 2. 青莲剑 SVG 图标 HTML
+        const swordSvg = `
+            <svg class="sword-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- 剑身 -->
+                <path d="M50 10 L55 30 L53 80 L47 80 L45 30 Z" fill="#00f2ff" />
+                <!-- 莲花剑格 -->
+                <path d="M40 75 Q50 65 60 75 Q60 85 50 82 Q40 85 40 75" fill="#fff" />
+                <path d="M42 78 Q50 72 58 78" fill="none" stroke="#00f2ff" stroke-width="2" />
+                <!-- 剑柄 -->
+                <rect x="48" y="82" width="4" height="12" rx="2" fill="#fff" />
+                <!-- 剑尖电光 -->
+                <circle cx="50" cy="8" r="1.5" fill="#fff" />
+            </svg>
+        `;
+
+        // 3. 渲染
         const files = [
             { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
             { name: "Visual C++6.0 (极速)", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/VC6.0/Visual.C++6.0.zip" },
@@ -242,30 +244,28 @@
         ];
 
         const isWechat = /MicroMessenger/i.test(navigator.userAgent);
-        const container = document.getElementById('fileList');
+        const listEl = document.getElementById('fileList');
 
-        files.forEach((file, index) => {
+        files.forEach(file => {
             const card = document.createElement('div');
             card.className = 'file-card';
-            card.style.animation = `cardEnter 0.6s backwards ${index * 0.15}s`;
-            
             card.innerHTML = `
-                <div class="file-name">${file.name}</div>
-                <a href="${file.link}" class="download-btn" onclick="handleDl(event, this)">
-                    DOWNLOAD
-                </a>
+                <div class="file-title-wrapper">
+                    ${swordSvg}
+                    <div class="file-name">${file.name}</div>
+                </div>
+                <a href="${file.link}" class="download-btn" onclick="handleDl(event, this)">DOWNLOAD</a>
             `;
-            container.appendChild(card);
+            listEl.appendChild(card);
         });
 
         function handleDl(e, btn) {
             if (isWechat) {
                 e.preventDefault();
                 document.getElementById('wechat-guide').style.display = 'block';
-                return;
+            } else {
+                btn.innerText = 'PREPARING...';
             }
-            btn.innerText = 'FETCHING...';
-            btn.style.background = 'linear-gradient(90deg, #ff00d0, #7000ff)';
         }
     </script>
 </body>
