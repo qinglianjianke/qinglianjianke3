@@ -11,11 +11,12 @@
             --purple: #7000ff;
             --lotus-pink: #ff85a1;
             --blade-jade: #00ffa3;
+            --bg-deep: #03061a;
         }
 
         body {
             margin: 0; padding: 0;
-            background: #01020a;
+            background: var(--bg-deep);
             color: #fff;
             font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
@@ -23,203 +24,219 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* 1. 极致粒子画布 - 只渲染发光的点，绝无连线 */
-        #starfield {
+        /* 1. 极光粒子画布 - 解决太黑和光效不强 */
+        #particle-web {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 50% 30%, #0d1233 0%, #01020a 100%);
+            /* 背景不再死黑，而是带深蓝光晕 */
+            background: radial-gradient(circle at 50% 40%, #0c154a 0%, #03061a 100%);
         }
 
-        /* 2. 顶部 Logo 星旋 */
+        /* 2. 顶部 Logo 与 标题 */
         .header {
             width: 100%;
-            padding: calc(50px + env(safe-area-inset-top)) 0 30px;
+            padding: calc(40px + env(safe-area-inset-top)) 0 30px;
             display: flex; flex-direction: column; align-items: center;
             z-index: 10;
         }
 
-        .logo-frame {
+        .logo-box {
             position: relative;
-            width: 130px; height: 130px;
+            width: 120px; height: 120px;
             display: flex; align-items: center; justify-content: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        .main-sword {
-            width: 70px; height: 70px;
+        .main-sword-svg {
+            width: 80px; height: 80px;
             filter: drop-shadow(0 0 15px var(--cyan));
             z-index: 5;
-            animation: swordFloat 4s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes swordFloat {
+        @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(1deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
         }
 
         .header h1 {
-            font-size: 26px; font-weight: 900; letter-spacing: 5px;
+            font-size: 28px; font-weight: 900; letter-spacing: 6px;
             background: linear-gradient(to bottom, #fff, var(--cyan));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 0;
+            margin: 0; text-shadow: 0 0 20px rgba(0,242,255,0.4);
         }
 
-        /* 3. 机能卡片列表 */
-        .main-content {
+        /* 3. 全息晶体卡片 */
+        .main-container {
             width: 100%; max-width: 500px;
-            padding: 0 18px 80px;
+            padding: 0 20px 100px;
             box-sizing: border-box;
             z-index: 5;
         }
 
         .file-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
             margin-bottom: 25px;
-            border-radius: 22px;
-            padding: 30px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border-radius: 25px;
+            padding: 35px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center;
-            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
         }
 
-        /* 卡片边缘呼吸流光 */
-        .file-card::after {
-            content: ""; position: absolute; inset: 0;
-            border-radius: 22px; padding: 1px;
-            background: linear-gradient(135deg, var(--lotus-pink), transparent, var(--cyan), transparent);
+        /* 扫光外框 */
+        .file-card::before {
+            content: ""; position: absolute; inset: -1px; border-radius: 25px;
+            padding: 1.5px;
+            background: linear-gradient(135deg, var(--lotus-pink), transparent, var(--cyan), transparent, var(--purple));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask-composite: exclude;
-            opacity: 0.4;
+            background-size: 200% 200%;
+            animation: glowMove 6s linear infinite;
         }
 
-        .title-group {
+        @keyframes glowMove { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
+
+        .title-wrapper {
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 25px; width: 100%;
         }
 
-        .mini-sword {
-            width: 26px; height: 26px; margin-right: 12px;
+        .item-sword {
+            width: 30px; height: 30px; margin-right: 12px;
             filter: drop-shadow(0 0 5px var(--blade-jade));
         }
 
         .file-name {
-            font-size: 18px; font-weight: 700; color: #fff;
-            letter-spacing: 0.5px;
+            font-size: 19px; font-weight: 700; color: #fff;
+            letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(0,242,255,0.4);
         }
 
-        /* 4. 极速按钮 */
+        /* 4. 霓虹按钮 */
         .download-btn {
-            width: 85%; height: 52px;
+            width: 85%; height: 55px;
             background: linear-gradient(90deg, var(--purple), var(--cyan));
-            border-radius: 14px;
+            border-radius: 15px;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; color: #fff;
-            font-weight: 900; font-size: 14px; letter-spacing: 2px;
+            font-weight: 900; font-size: 15px; letter-spacing: 2px;
             border: none; position: relative; overflow: hidden;
-            box-shadow: 0 8px 20px rgba(112, 0, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(112, 0, 255, 0.4);
             transition: 0.3s;
         }
-        .download-btn:active { transform: scale(0.95); opacity: 0.8; }
 
-        /* 按钮扫光 */
-        .download-btn::before {
+        .download-btn::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: btnScan 3s infinite;
+            animation: scan 2.5s infinite;
         }
-        @keyframes btnScan { 0% { left: -100%; } 40%, 100% { left: 100%; } }
+        @keyframes scan { 0% { left: -100%; } 40%, 100% { left: 100%; } }
 
-        /* 微信遮罩层 */
+        /* 微信专供 */
+        #wechat-nav {
+            display: none; width: 90%; max-width: 500px; margin: 20px 0;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            border: none; color: white; padding: 15px; border-radius: 12px;
+            font-weight: bold; font-size: 14px; text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.3);
+        }
+
         #wechat-guide {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); z-index: 9999; backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.95); z-index: 9999; backdrop-filter: blur(15px);
         }
 
-        .footer { padding: 30px; text-align: center; font-size: 9px; color: var(--cyan); opacity: 0.3; letter-spacing: 5px; }
-
+        .footer { padding: 40px; text-align: center; font-size: 10px; color: var(--cyan); opacity: 0.3; letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
-    <canvas id="starfield"></canvas>
+    <canvas id="particle-web"></canvas>
 
     <header class="header">
-        <div class="logo-frame" id="logoFrame">
-            <!-- SVG 由 JS 注入 -->
-        </div>
+        <div class="logo-box" id="mainLogo"></div>
         <h1>青莲剑客下载站</h1>
     </header>
 
+    <!-- 仅微信环境下脚本会显示的按钮 -->
+    <div id="wechat-nav" onclick="copyLink()">🚀 网址已复制，点此去浏览器打开</div>
+
     <div id="wechat-guide" onclick="this.style.display='none'">
         <div style="position: absolute; top: 20px; right: 30px; color: var(--cyan); text-align: right;">
-            <div style="font-size: 40px; animation: bounce 1s infinite;">↗</div>
-            <div style="color:#fff; margin-top: 15px;">请点击右上角三个点<br>选择“在浏览器打开”</div>
+            <div style="font-size: 50px; animation: bounce 1s infinite;">↗</div>
+            <div style="color:#fff; margin-top: 15px; font-weight: bold;">请点击右上角三个点<br>选择“在浏览器打开”</div>
         </div>
     </div>
 
-    <main class="main-content">
-        <div id="fileList"></div>
-    </main>
+    <main class="main-container" id="fileList"></main>
 
-    <div class="footer">STATION_V7.2 // QUANTUM_PARTICLE_CORE</div>
+    <div class="footer">STATION_ENCRYPTED // CORE_V8.0</div>
 
     <script>
-        // 1. 极致流畅粒子引擎 - 解决卡顿与线条问题
-        const canvas = document.getElementById('starfield');
+        // 1. 极光青莲剑 SVG 模板
+        const swordSVG = `
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00ffa3;" />
+                        <stop offset="100%" style="stop-color:#00f2ff;" />
+                    </linearGradient>
+                </defs>
+                <path d="M50 5 L58 35 L54 75 L46 75 L42 35 Z" fill="url(#bladeGrad)" />
+                <path d="M50 68 Q58 58 64 68 Q64 78 50 75 Q36 78 36 68 Q42 58 50 68" fill="#ffffff" />
+                <path d="M40 68 Q30 65 35 78 Q42 85 50 78" fill="#ff85a1" />
+                <path d="M60 68 Q70 65 65 78 Q58 85 50 78" fill="#ff85a1" />
+                <rect x="47" y="78" width="6" height="15" rx="3" fill="#ffffff" />
+            </svg>
+        `;
+
+        // 2. 高亮粒子引擎 (解决太黑)
+        const canvas = document.getElementById('particle-web');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        const particleCount = 200; // 高密度粒子感
 
-        function initCanvas() {
+        function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            particles = [];
+            // 背景漫游粒子
+            for (let i = 0; i < 120; i++) particles.push(new Particle(false));
+            // Logo 旋转粒子
+            for (let i = 0; i < 80; i++) particles.push(new Particle(true));
         }
 
         class Particle {
             constructor(isOrbit) {
                 this.isOrbit = isOrbit;
-                this.reset();
-            }
-            reset() {
-                if(this.isOrbit) {
-                    this.angle = Math.random() * Math.PI * 2;
-                    this.radius = Math.random() * 50 + 55;
-                    this.speed = Math.random() * 0.015 + 0.005;
-                } else {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.vx = (Math.random() - 0.5) * 0.4;
-                    this.vy = (Math.random() - 0.5) * 0.4;
-                }
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 0.5;
-                this.color = Math.random() > 0.4 ? '#00f2ff' : '#ff85a1';
-                this.alpha = Math.random();
-                this.flicker = Math.random() * 0.02 + 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+                this.radius = Math.random() * 50 + 60;
+                this.speed = Math.random() * 0.02 + 0.005;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.color = Math.random() > 0.5 ? '#00f2ff' : '#ff85a1';
             }
             update() {
                 if(this.isOrbit) {
                     this.angle += this.speed;
-                    this.x = canvas.width/2 + Math.cos(this.angle) * this.radius;
-                    this.y = 115 + Math.sin(this.angle) * this.radius; // 这里的115对应logo中心
+                    this.x = canvas.width / 2 + Math.cos(this.angle) * this.radius;
+                    this.y = 120 + Math.sin(this.angle) * this.radius; // 120 对应 Logo 高度
                 } else {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                    this.x += this.vx; this.y += this.vy;
+                    if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
                 }
-                // 呼吸闪烁感
-                this.alpha += this.flicker;
-                if(this.alpha > 1 || this.alpha < 0.2) this.flicker *= -1;
             }
             draw() {
-                ctx.globalAlpha = this.alpha;
                 ctx.fillStyle = this.color;
-                // 添加发光晕影
-                ctx.shadowBlur = 8;
+                // 核心：添加发光，解决光效不明显
+                ctx.shadowBlur = 10;
                 ctx.shadowColor = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -227,44 +244,25 @@
             }
         }
 
-        function create() {
-            particles = [];
-            for (let i = 0; i < 70; i++) particles.push(new Particle(true)); // 旋转环
-            for (let i = 0; i < 130; i++) particles.push(new Particle(false)); // 背景流星
-        }
-
-        function loop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function animate() {
+            // 核心：稍微保留一点上一帧的残影，增加流动感
+            ctx.fillStyle = 'rgba(3, 6, 26, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
-            requestAnimationFrame(loop);
+            requestAnimationFrame(animate);
         }
 
-        window.addEventListener('resize', () => { initCanvas(); create(); });
-        initCanvas(); create(); loop();
+        window.addEventListener('resize', init);
+        init();
+        animate();
 
-        // 2. 幻彩青莲剑 SVG
-        const swordSvgHtml = `
-            <svg class="main-sword" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="blade" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#00ffa3;" />
-                        <stop offset="100%" style="stop-color:#00f2ff;" />
-                    </linearGradient>
-                </defs>
-                <path d="M50 5 L57 32 L53 75 L47 75 L43 32 Z" fill="url(#blade)" />
-                <path d="M50 68 Q58 58 64 68 Q64 78 50 75 Q36 78 36 68 Q42 58 50 68" fill="#ffffff" />
-                <path d="M40 68 Q30 65 35 78 Q42 85 50 78" fill="#ff85a1" />
-                <stop offset="100%" style="stop-color:#ff85a1;" />
-                <path d="M60 68 Q70 65 65 78 Q58 85 50 78" fill="#ff85a1" />
-                <rect x="47" y="78" width="6" height="15" rx="3" fill="#ffffff" />
-            </svg>
-        `;
-        document.getElementById('logoFrame').innerHTML = swordSvgHtml;
+        // 3. 渲染 Logo 和 文件列表 (移除括号，增强对齐)
+        document.getElementById('mainLogo').innerHTML = `<div class="main-sword-svg">${swordSVG}</div>`;
 
-        // 3. 数据渲染 (移除括注)
         const files = [
             { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
             { name: "Visual C++6.0", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/VC6.0/Visual.C++6.0.zip" },
@@ -273,32 +271,36 @@
         ];
 
         const isWechat = /MicroMessenger/i.test(navigator.userAgent);
-        const listEl = document.getElementById('fileList');
+        if(isWechat) document.getElementById('wechat-nav').style.display = 'block';
 
+        const listEl = document.getElementById('fileList');
         files.forEach(file => {
             const card = document.createElement('div');
             card.className = 'file-card';
             card.innerHTML = `
-                <div class="title-group">
-                    <svg class="mini-sword" viewBox="0 0 100 100">${document.querySelector('.main-sword').innerHTML}</svg>
+                <div class="title-wrapper">
+                    <div class="item-sword">${swordSVG}</div>
                     <div class="file-name">${file.name}</div>
                 </div>
-                <a href="${file.link}" class="download-btn" onclick="handleDl(event, this)">DOWNLOAD</a>
+                <a href="${file.link}" class="download-btn" onclick="handleDl(event)">DOWNLOAD</a>
             `;
             listEl.appendChild(card);
         });
 
-        function handleDl(e, btn) {
+        function handleDl(e) {
             if (isWechat) {
                 e.preventDefault();
                 document.getElementById('wechat-guide').style.display = 'block';
-            } else {
-                btn.innerText = 'SYNCING...';
-                btn.style.filter = 'hue-rotate(45deg)';
             }
         }
 
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        function copyLink() {
+            const t = document.createElement("input");
+            t.value = window.location.href;
+            document.body.appendChild(t); t.select();
+            document.execCommand("copy"); document.body.removeChild(t);
+            alert("站点网址已复制！请在浏览器中打开下载。");
+        }
     </script>
 </body>
 </html>
