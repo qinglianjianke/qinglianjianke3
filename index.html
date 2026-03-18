@@ -9,54 +9,54 @@
         :root {
             --cyan: #00f2ff;
             --purple: #7000ff;
-            --lotus-pink: #ff85a1;
-            --blade-jade: #00ffa3;
-            --bg-deep: #03061a;
+            --pink: #ff85a1;
+            --blade: #00ffa3;
+            --bg: #02040d;
         }
 
         body {
             margin: 0; padding: 0;
-            background: var(--bg-deep);
+            background: var(--bg);
             color: #fff;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* 1. 极光粒子画布 - 解决太黑和光效不强 */
-        #particle-web {
+        /* 1. 极速量子画布 - 彻底解决闪烁 */
+        #quantum-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            /* 背景不再死黑，而是带深蓝光晕 */
-            background: radial-gradient(circle at 50% 40%, #0c154a 0%, #03061a 100%);
+            /* 提亮背景，解决死黑 */
+            background: radial-gradient(circle at 50% 40%, #0a1445 0%, #02040d 100%);
         }
 
-        /* 2. 顶部 Logo 与 标题 */
+        /* 2. 顶部 Logo 区域 */
         .header {
             width: 100%;
-            padding: calc(40px + env(safe-area-inset-top)) 0 30px;
+            padding: calc(50px + env(safe-area-inset-top)) 0 30px;
             display: flex; flex-direction: column; align-items: center;
             z-index: 10;
         }
 
-        .logo-box {
+        .logo-frame {
             position: relative;
             width: 120px; height: 120px;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 10px;
         }
 
-        .main-sword-svg {
+        .main-sword {
             width: 80px; height: 80px;
             filter: drop-shadow(0 0 15px var(--cyan));
             z-index: 5;
-            animation: float 4s ease-in-out infinite;
+            animation: swordFloat 4s ease-in-out infinite;
         }
 
-        @keyframes float {
+        @keyframes swordFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
         }
 
         .header h1 {
@@ -66,8 +66,8 @@
             margin: 0; text-shadow: 0 0 20px rgba(0,242,255,0.4);
         }
 
-        /* 3. 全息晶体卡片 */
-        .main-container {
+        /* 3. 资源卡片列表 */
+        .container {
             width: 100%; max-width: 500px;
             padding: 0 20px 100px;
             box-sizing: border-box;
@@ -76,71 +76,70 @@
 
         .file-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             margin-bottom: 25px;
             border-radius: 25px;
-            padding: 35px 20px;
+            padding: 35px 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             overflow: hidden;
         }
 
-        /* 扫光外框 */
+        /* 极速扫边效果 */
         .file-card::before {
             content: ""; position: absolute; inset: -1px; border-radius: 25px;
-            padding: 1.5px;
-            background: linear-gradient(135deg, var(--lotus-pink), transparent, var(--cyan), transparent, var(--purple));
+            padding: 1px;
+            background: linear-gradient(135deg, var(--pink), transparent, var(--cyan), transparent, var(--purple));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask-composite: exclude;
             background-size: 200% 200%;
-            animation: glowMove 6s linear infinite;
+            animation: borderRotate 6s linear infinite;
         }
+        @keyframes borderRotate { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
 
-        @keyframes glowMove { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
-
-        .title-wrapper {
+        .title-group {
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 25px; width: 100%;
         }
 
-        .item-sword {
-            width: 30px; height: 30px; margin-right: 12px;
-            filter: drop-shadow(0 0 5px var(--blade-jade));
+        .mini-sword {
+            width: 28px; height: 28px; margin-right: 12px;
+            filter: drop-shadow(0 0 5px var(--blade));
         }
 
         .file-name {
             font-size: 19px; font-weight: 700; color: #fff;
-            letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(0,242,255,0.4);
+            letter-spacing: 0.5px;
         }
 
-        /* 4. 霓虹按钮 */
+        /* 4. 极速按钮 */
         .download-btn {
             width: 85%; height: 55px;
             background: linear-gradient(90deg, var(--purple), var(--cyan));
             border-radius: 15px;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; color: #fff;
-            font-weight: 900; font-size: 15px; letter-spacing: 2px;
+            font-weight: 900; font-size: 15px; letter-spacing: 3px;
             border: none; position: relative; overflow: hidden;
             box-shadow: 0 8px 25px rgba(112, 0, 255, 0.4);
             transition: 0.3s;
         }
-
         .download-btn::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             animation: scan 2.5s infinite;
         }
         @keyframes scan { 0% { left: -100%; } 40%, 100% { left: 100%; } }
+        .download-btn:active { transform: scale(0.94); }
 
         /* 微信专供 */
         #wechat-nav {
             display: none; width: 90%; max-width: 500px; margin: 20px 0;
             background: linear-gradient(90deg, var(--purple), var(--cyan));
-            border: none; color: white; padding: 15px; border-radius: 12px;
+            border: none; color: white; padding: 16px; border-radius: 12px;
             font-weight: bold; font-size: 14px; text-align: center;
             box-shadow: 0 5px 20px rgba(0, 242, 255, 0.3);
         }
@@ -150,52 +149,46 @@
             background: rgba(0,0,0,0.95); z-index: 9999; backdrop-filter: blur(15px);
         }
 
-        .footer { padding: 40px; text-align: center; font-size: 10px; color: var(--cyan); opacity: 0.3; letter-spacing: 4px; }
+        .footer { padding: 40px; text-align: center; font-size: 10px; color: var(--cyan); opacity: 0.3; letter-spacing: 5px; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
     </style>
 </head>
 <body>
 
-    <canvas id="particle-web"></canvas>
+    <canvas id="quantum-canvas"></canvas>
 
     <header class="header">
-        <div class="logo-box" id="mainLogo"></div>
+        <div class="logo-frame" id="mainLogo"></div>
         <h1>青莲剑客下载站</h1>
     </header>
 
-    <!-- 仅微信环境下脚本会显示的按钮 -->
     <div id="wechat-nav" onclick="copyLink()">🚀 网址已复制，点此去浏览器打开</div>
 
     <div id="wechat-guide" onclick="this.style.display='none'">
         <div style="position: absolute; top: 20px; right: 30px; color: var(--cyan); text-align: right;">
             <div style="font-size: 50px; animation: bounce 1s infinite;">↗</div>
-            <div style="color:#fff; margin-top: 15px; font-weight: bold;">请点击右上角三个点<br>选择“在浏览器打开”</div>
+            <div style="color:#fff; margin-top: 15px;">微信环境受限<br>请点击右上角三个点<br>选择“在浏览器打开”</div>
         </div>
     </div>
 
-    <main class="main-container" id="fileList"></main>
+    <main class="container" id="fileList"></main>
 
-    <div class="footer">STATION_ENCRYPTED // CORE_V8.0</div>
+    <div class="footer">STATION_V8.5 // QUANTUM_STABLE</div>
 
     <script>
-        // 1. 极光青莲剑 SVG 模板
-        const swordSVG = `
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#00ffa3;" />
-                        <stop offset="100%" style="stop-color:#00f2ff;" />
-                    </linearGradient>
-                </defs>
-                <path d="M50 5 L58 35 L54 75 L46 75 L42 35 Z" fill="url(#bladeGrad)" />
-                <path d="M50 68 Q58 58 64 68 Q64 78 50 75 Q36 78 36 68 Q42 58 50 68" fill="#ffffff" />
-                <path d="M40 68 Q30 65 35 78 Q42 85 50 78" fill="#ff85a1" />
-                <path d="M60 68 Q70 65 65 78 Q58 85 50 78" fill="#ff85a1" />
-                <rect x="47" y="78" width="6" height="15" rx="3" fill="#ffffff" />
-            </svg>
-        `;
+        // 核心图标模板
+        const swordSVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="b" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#00ffa3"/><stop offset="100%" stop-color="#00f2ff"/></linearGradient></defs>
+            <path d="M50 5 L58 35 L54 75 L46 75 L42 35 Z" fill="url(#b)"/>
+            <path d="M50 68 Q58 58 64 68 Q64 78 50 75 Q36 78 36 68 Q42 58 50 68" fill="#fff"/>
+            <path d="M40 68 Q30 65 35 78 Q42 85 50 78" fill="#ff85a1"/>
+            <path d="M60 68 Q70 65 65 78 Q58 85 50 78" fill="#ff85a1"/>
+            <rect x="47" y="78" width="6" height="15" rx="3" fill="#fff"/>
+        </svg>`;
 
-        // 2. 高亮粒子引擎 (解决太黑)
-        const canvas = document.getElementById('particle-web');
+        // 1. 极致流畅粒子引擎 - 彻底解决闪烁与卡顿
+        const canvas = document.getElementById('quantum-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
 
@@ -203,30 +196,31 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             particles = [];
-            // 背景漫游粒子
-            for (let i = 0; i < 120; i++) particles.push(new Particle(false));
-            // Logo 旋转粒子
-            for (let i = 0; i < 80; i++) particles.push(new Particle(true));
+            for (let i = 0; i < 110; i++) particles.push(new Particle(false));
+            for (let i = 0; i < 70; i++) particles.push(new Particle(true));
         }
 
         class Particle {
             constructor(isOrbit) {
                 this.isOrbit = isOrbit;
+                this.reset();
+            }
+            reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
+                this.size = Math.random() * 1.8 + 0.5;
                 this.angle = Math.random() * Math.PI * 2;
-                this.radius = Math.random() * 50 + 60;
-                this.speed = Math.random() * 0.02 + 0.005;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.color = Math.random() > 0.5 ? '#00f2ff' : '#ff85a1';
+                this.radius = Math.random() * 45 + 55;
+                this.speed = Math.random() * 0.01 + 0.005;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.color = Math.random() > 0.4 ? '#00f2ff' : '#ff85a1';
             }
             update() {
                 if(this.isOrbit) {
                     this.angle += this.speed;
                     this.x = canvas.width / 2 + Math.cos(this.angle) * this.radius;
-                    this.y = 120 + Math.sin(this.angle) * this.radius; // 120 对应 Logo 高度
+                    this.y = 110 + Math.sin(this.angle) * this.radius; // 对应logo位置
                 } else {
                     this.x += this.vx; this.y += this.vy;
                     if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
@@ -234,10 +228,15 @@
                 }
             }
             draw() {
+                // 双层绘制模拟发光，性能极高且不闪烁
                 ctx.fillStyle = this.color;
-                // 核心：添加发光，解决光效不明显
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
+                // 外层柔光
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                ctx.fill();
+                // 内层核心
+                ctx.globalAlpha = 1.0;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -245,10 +244,8 @@
         }
 
         function animate() {
-            // 核心：稍微保留一点上一帧的残影，增加流动感
-            ctx.fillStyle = 'rgba(3, 6, 26, 0.2)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+            // 全帧清理，杜绝残留和闪烁
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
                 p.update();
                 p.draw();
@@ -257,11 +254,10 @@
         }
 
         window.addEventListener('resize', init);
-        init();
-        animate();
+        init(); animate();
 
-        // 3. 渲染 Logo 和 文件列表 (移除括号，增强对齐)
-        document.getElementById('mainLogo').innerHTML = `<div class="main-sword-svg">${swordSVG}</div>`;
+        // 2. 渲染内容
+        document.getElementById('mainLogo').innerHTML = `<div class="main-sword">${swordSVG}</div>`;
 
         const files = [
             { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
@@ -278,8 +274,8 @@
             const card = document.createElement('div');
             card.className = 'file-card';
             card.innerHTML = `
-                <div class="title-wrapper">
-                    <div class="item-sword">${swordSVG}</div>
+                <div class="title-group">
+                    <div class="mini-sword">${swordSVG}</div>
                     <div class="file-name">${file.name}</div>
                 </div>
                 <a href="${file.link}" class="download-btn" onclick="handleDl(event)">DOWNLOAD</a>
@@ -299,7 +295,7 @@
             t.value = window.location.href;
             document.body.appendChild(t); t.select();
             document.execCommand("copy"); document.body.removeChild(t);
-            alert("站点网址已复制！请在浏览器中打开下载。");
+            alert("站点网址已复制！请在浏览器中打开。");
         }
     </script>
 </body>
