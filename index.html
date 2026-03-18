@@ -55,7 +55,6 @@
         .file-name { font-weight: 500; font-size: 15px; color: #fff; word-break: break-all; display: flex; align-items: center; }
         .file-name::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--primary-color); margin-right: 12px; border-radius: 2px; box-shadow: 0 0 8px var(--primary-color); }
 
-        /* 按钮组 */
         .btn-group { display: flex; gap: 8px; }
         .btn {
             text-decoration: none; padding: 8px 16px; border-radius: 6px;
@@ -63,22 +62,21 @@
             display: inline-flex; align-items: center; justify-content: center;
         }
 
-        /* 默认下载按钮 */
         .download-btn { background: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); flex: 1; white-space: nowrap; }
         .download-btn:hover { background: var(--primary-color); color: #000; box-shadow: 0 0 15px var(--primary-color); }
 
-        /* 微信专供复制按钮：默认在所有环境下隐藏 */
-        .copy-btn { 
+        /* 微信专供：复制本页网址按钮 */
+        .copy-page-btn { 
             display: none; 
             background: rgba(255,255,255,0.05); 
             color: #aaa; border: 1px solid #555; 
             cursor: pointer;
         }
 
-        /* 只有在识别到微信 body class 时才显示复制按钮 */
-        body.is-wechat .copy-btn { display: flex; }
+        /* 只有微信环境下显示该按钮 */
+        body.is-wechat .copy-page-btn { display: flex; }
 
-        /* 微信点击下载后的引导遮罩层 */
+        /* 微信引导遮罩层 */
         #wechat-guide {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 9999; backdrop-filter: blur(8px);
@@ -93,7 +91,7 @@
 </head>
 <body>
 
-    <!-- 微信内点击下载才会弹出的引导框 -->
+    <!-- 微信引导框 -->
     <div id="wechat-guide" onclick="this.style.display='none'">
         <div class="guide-content">
             <div class="guide-arrow">↗</div>
@@ -110,19 +108,14 @@
     <div class="container">
         <div class="header">
             <h1>青莲剑客下载站</h1>
-            <p>CORE_DATA_REPOSITORY // SYSTEM_V3.3</p>
+            <p>CORE_DATA_REPOSITORY // SYSTEM_V3.4</p>
         </div>
 
-        <ul class="file-list" id="fileList">
-            <!-- 列表内容将通过 JavaScript 动态生成 -->
-        </ul>
+        <ul class="file-list" id="fileList"></ul>
         <div class="footer">CONNECTED TO CLOUD SERVER // ENCRYPTED_ACCESS</div>
     </div>
 
     <script>
-        // ==========================================
-        //  配置区域：个人信息和链接全保留
-        // ==========================================
         const files = [
             { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
             { name: "Visual C++6.0", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/VC6.0/Visual.C++6.0.zip" },
@@ -130,7 +123,6 @@
             { name: "OpenSpeedy", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/OpenSpeedy/OpenSpeedy.zip" },
         ];
 
-        // 环境检测：检测是否在微信内置浏览器中
         const isWechat = /MicroMessenger/i.test(navigator.userAgent);
         if (isWechat) {
             document.body.classList.add('is-wechat');
@@ -146,33 +138,31 @@
             li.innerHTML = `
                 <div class="file-name">${file.name}</div>
                 <div class="btn-group">
-                    <div class="btn copy-btn" onclick="copyLink('${file.link}')">复制链接</div>
-                    <a href="${file.link}" class="download-btn btn" onclick="handleDownload(event, '${file.link}')">下载资源</a>
+                    <!-- 微信专供：点击复制本页网址 -->
+                    <div class="btn copy-page-btn" onclick="copyStationLink()">分享站点</div>
+                    <a href="${file.link}" class="download-btn btn" onclick="handleDownload(event)">下载资源</a>
                 </div>
             `;
             listContainer.appendChild(li);
         });
 
-        // 微信环境下点击下载的处理逻辑
-        function handleDownload(event, url) {
+        function handleDownload(event) {
             if (isWechat) {
-                // 如果是微信环境，阻止默认下载行为，弹出引导框
                 event.preventDefault();
                 document.getElementById('wechat-guide').style.display = 'flex';
             }
-            // 非微信环境（电脑或普通浏览器）则不执行以上逻辑，正常下载
         }
 
-        // 复制链接功能
-        function copyLink(url) {
-            const fullUrl = new URL(url, window.location.href).href;
+        // 核心修改：复制当前下载站的网址
+        function copyStationLink() {
+            const stationUrl = window.location.href; // 获取当前下载站的地址
             const tempInput = document.createElement("input");
-            tempInput.value = fullUrl;
+            tempInput.value = stationUrl;
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
-            alert("下载链接已复制，请在浏览器中粘贴下载！");
+            alert("下载站网址已复制！\n请粘贴到手机浏览器打开，即可享受极速下载。");
         }
     </script>
 </body>
