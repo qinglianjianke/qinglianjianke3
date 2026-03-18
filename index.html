@@ -2,15 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 移动端视口适配：禁止缩放，保证体验 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" href="mine.jpg" type="image/jpeg">
     <title>青莲剑客下载站 - 核心资源</title>
     <style>
         :root {
-            --primary-color: #00f2ff; /* 科技蓝 */
-            --accent-color: #7000ff;  /* 幻影紫 */
-            --bg-dark: #0a0b1e;       /* 深空底色 */
+            --primary-color: #00f2ff;
+            --accent-color: #7000ff;
+            --bg-dark: #0a0b1e;
             --text-main: #e0e0e0;
             --card-bg: rgba(255, 255, 255, 0.05);
         }
@@ -18,208 +17,111 @@
         body {
             font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(112, 0, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(0, 242, 255, 0.1) 0%, transparent 40%);
+            background-image: radial-gradient(circle at 20% 30%, rgba(112, 0, 255, 0.1) 0%, transparent 40%);
             background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
+            margin: 0; padding: 20px 10px;
             color: var(--text-main);
-            padding: 20px 10px; /* 缩小边距适配手机 */
+            display: flex; justify-content: center; min-height: 100vh;
             box-sizing: border-box;
         }
 
-        /* 微信提示遮罩层 */
-        #wechat-mask {
-            display: none; /* 默认隐藏 */
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 10000;
-            color: white;
-            text-align: center;
-            padding-top: 20px;
-        }
-        .wechat-arrow {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 40px;
-            animation: bounce 1s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* 玻璃质感容器 */
         .container {
             background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            width: 100%;
-            max-width: 650px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 100%; max-width: 650px;
+            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
-            display: flex;
-            flex-direction: column;
+            overflow: hidden; animation: fadeIn 0.8s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 科技感头部 */
-        .header {
-            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
-            padding: 25px 15px;
-            text-align: center;
-            position: relative;
-        }
+        .header { background: linear-gradient(90deg, var(--accent-color), var(--primary-color)); padding: 25px; text-align: center; }
+        .header h1 { margin: 0; font-size: 22px; color: white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+        .header p { margin-top: 8px; font-size: 10px; opacity: 0.7; font-family: monospace; }
 
-        .header h1 {
-            margin: 0;
-            font-size: 20px; /* 手机端字体略微缩小 */
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: white;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .header p {
-            margin-top: 8px;
-            font-size: 10px;
-            opacity: 0.7;
-            font-family: monospace;
-        }
-
-        /* 文件列表样式 */
-        .file-list {
-            list-style: none;
-            padding: 5px;
-            margin: 0;
-        }
-
+        .file-list { list-style: none; padding: 5px; margin: 0; }
         .file-item {
             background: rgba(255, 255, 255, 0.03);
-            margin: 10px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 18px;
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
+            margin: 10px; padding: 15px 20px; border-radius: 12px;
+            display: flex; flex-direction: column; gap: 15px;
+            transition: 0.3s; border-left: 4px solid transparent;
         }
 
-        /* 手机端点击反馈 */
-        .file-item:active {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(0.98);
+        @media (min-width: 550px) {
+            .file-item { flex-direction: row; justify-content: space-between; align-items: center; }
         }
 
-        .file-name {
-            font-weight: 500;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            color: #fff;
-            padding-right: 10px;
-            word-break: break-all; /* 防止长文件名撑破布局 */
+        .file-name { font-weight: 500; font-size: 15px; color: #fff; word-break: break-all; display: flex; align-items: center; }
+        .file-name::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--primary-color); margin-right: 12px; border-radius: 2px; box-shadow: 0 0 8px var(--primary-color); }
+
+        /* 按钮组 */
+        .btn-group { display: flex; gap: 8px; }
+        .btn {
+            text-decoration: none; padding: 8px 16px; border-radius: 6px;
+            font-size: 12px; font-weight: bold; transition: 0.3s;
+            display: inline-flex; align-items: center; justify-content: center;
         }
 
-        .file-name::before {
-            content: "";
-            display: inline-block;
-            min-width: 8px;
-            height: 8px;
-            background: var(--primary-color);
-            margin-right: 12px;
-            border-radius: 2px;
-            box-shadow: 0 0 8px var(--primary-color);
+        /* 默认下载按钮 */
+        .download-btn { background: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); flex: 1; white-space: nowrap; }
+        .download-btn:hover { background: var(--primary-color); color: #000; box-shadow: 0 0 15px var(--primary-color); }
+
+        /* 微信专供复制按钮：默认在所有环境下隐藏 */
+        .copy-btn { 
+            display: none; 
+            background: rgba(255,255,255,0.05); 
+            color: #aaa; border: 1px solid #555; 
+            cursor: pointer;
         }
 
-        /* 霓虹下载按钮 */
-        .download-btn {
-            background: transparent;
-            color: var(--primary-color);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            border: 1px solid var(--primary-color);
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
+        /* 只有在识别到微信 body class 时才显示复制按钮 */
+        body.is-wechat .copy-btn { display: flex; }
 
-        .download-btn:hover {
-            background: var(--primary-color);
-            color: #000;
-            box-shadow: 0 0 15px var(--primary-color);
+        /* 微信点击下载后的引导遮罩层 */
+        #wechat-guide {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 9999; backdrop-filter: blur(8px);
+            justify-content: center; align-items: flex-start; padding-top: 40px;
         }
+        .guide-content { width: 80%; background: #1a1b2e; border: 1px solid var(--primary-color); border-radius: 15px; padding: 25px; position: relative; color: #fff; text-align: center; }
+        .guide-arrow { position: absolute; top: -30px; right: 20px; font-size: 40px; color: var(--primary-color); animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 9px;
-            color: rgba(255, 255, 255, 0.2);
-            font-family: monospace;
-            letter-spacing: 1px;
-        }
-
-        /* 适配手机窄屏 */
-        @media (max-width: 480px) {
-            .file-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 15px;
-            }
-            .download-btn {
-                width: 100%;
-                margin-top: 12px;
-                text-align: center;
-                padding: 10px 0;
-                box-sizing: border-box;
-            }
-            .header h1 { font-size: 18px; }
-        }
+        .footer { text-align: center; padding: 20px; font-size: 10px; color: rgba(255, 255, 255, 0.2); font-family: monospace; }
     </style>
 </head>
 <body>
 
-    <!-- 微信引导遮罩 -->
-    <div id="wechat-mask">
-        <div class="wechat-arrow">↗</div>
-        <div style="margin-top: 80px; padding: 0 30px;">
-            <p style="font-size: 20px; font-weight: bold; color: var(--primary-color);">微信无法直接下载文件</p>
-            <p style="margin-top: 15px;">请点击右上角 <span style="font-size: 24px;">...</span></p>
-            <p>选择 <span style="background: #28a745; padding: 2px 8px; border-radius: 4px; color: white;">在浏览器打开</span> 即可正常下载</p>
+    <!-- 微信内点击下载才会弹出的引导框 -->
+    <div id="wechat-guide" onclick="this.style.display='none'">
+        <div class="guide-content">
+            <div class="guide-arrow">↗</div>
+            <h3 style="color: var(--primary-color); margin-top: 0;">微信下载受限</h3>
+            <p style="font-size: 13px; line-height: 1.6; color: #bbb;">
+                由于微信安全限制，无法直接下载压缩包。<br><br>
+                1. 点击右上角 <strong style="color:#fff">三个点</strong><br>
+                2. 选择 <strong style="color:var(--primary-color)">在浏览器打开</strong> 即可开始下载
+            </p>
+            <button style="margin-top: 15px; background: transparent; border: 1px solid #555; color: #888; padding: 8px 20px; border-radius: 5px; font-size: 12px;">知道了</button>
         </div>
     </div>
 
     <div class="container">
         <div class="header">
             <h1>青莲剑客下载站</h1>
-            <p>CORE_DATA_REPOSITORY // MOBILE_v3.1</p>
+            <p>CORE_DATA_REPOSITORY // SYSTEM_V3.3</p>
         </div>
+
         <ul class="file-list" id="fileList">
-            <!-- 列表内容将通过 JavaScript 自动生成 -->
+            <!-- 列表内容将通过 JavaScript 动态生成 -->
         </ul>
-        <div class="footer">
-            CONNECTED TO CLOUD SERVER // ENCRYPTED_ACCESS
-        </div>
+        <div class="footer">CONNECTED TO CLOUD SERVER // ENCRYPTED_ACCESS</div>
     </div>
 
     <script>
         // ==========================================
-        //  配置区域：保持原有内容及链接不变
+        //  配置区域：个人信息和链接全保留
         // ==========================================
         const files = [
             { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
@@ -228,16 +130,12 @@
             { name: "OpenSpeedy", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/OpenSpeedy/OpenSpeedy.zip" },
         ];
 
-        // 1. 微信环境检测逻辑
-        function detectWechat() {
-            var ua = navigator.userAgent.toLowerCase();
-            if (ua.match(/MicroMessenger/i) == "micromessenger") {
-                document.getElementById('wechat-mask').style.display = 'block';
-            }
+        // 环境检测：检测是否在微信内置浏览器中
+        const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+        if (isWechat) {
+            document.body.classList.add('is-wechat');
         }
-        window.onload = detectWechat;
 
-        // 2. 动态生成列表
         const listContainer = document.getElementById('fileList');
 
         files.forEach((file, index) => {
@@ -247,10 +145,35 @@
             
             li.innerHTML = `
                 <div class="file-name">${file.name}</div>
-                <a href="${file.link}" class="download-btn" target="_blank" download>下载资源</a>
+                <div class="btn-group">
+                    <div class="btn copy-btn" onclick="copyLink('${file.link}')">复制链接</div>
+                    <a href="${file.link}" class="download-btn btn" onclick="handleDownload(event, '${file.link}')">下载资源</a>
+                </div>
             `;
             listContainer.appendChild(li);
         });
+
+        // 微信环境下点击下载的处理逻辑
+        function handleDownload(event, url) {
+            if (isWechat) {
+                // 如果是微信环境，阻止默认下载行为，弹出引导框
+                event.preventDefault();
+                document.getElementById('wechat-guide').style.display = 'flex';
+            }
+            // 非微信环境（电脑或普通浏览器）则不执行以上逻辑，正常下载
+        }
+
+        // 复制链接功能
+        function copyLink(url) {
+            const fullUrl = new URL(url, window.location.href).href;
+            const tempInput = document.createElement("input");
+            tempInput.value = fullUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("下载链接已复制，请在浏览器中粘贴下载！");
+        }
     </script>
 </body>
 </html>
