@@ -2,39 +2,299 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="icon" href="mine.jpg" type="image/jpeg">
     <title>青莲剑客下载站</title>
     <style>
         :root {
-            --blue: #2a2eff;    /* 浓郁深蓝 */
-            --purple: #8a2be2;  /* 极光紫 */
-            --cyan: #00f2ff;    /* 霓虹青 */
-            --bg-dark: #030512; /* 深夜底色 */
+            --eblue: #2563EB;     /* 电光蓝 */
+            --ipurple: #7C3AED;   /* 青莲紫 */
+            --bg-center: #120A2A; /* 径向中心 */
+            --bg-edge: #050508;   /* 边缘纯黑 */
+            --text-w: rgba(255, 255, 255, 0.95);
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
         }
 
-        /* 动态浓郁色彩背景 */
+        /* 1. 背景系统：分层视差与动态网格 */
         body {
-            margin: 0; padding: 30px 15px;
-            background: var(--bg-dark);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            color: #fff;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at 50% 30%, var(--bg-center) 0%, var(--bg-edge) 100%);
+            color: var(--text-w);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
             min-height: 100vh;
-            display: flex; flex-direction: column; align-items: center;
             overflow-x: hidden;
-            /* 背景装饰：填补两边空洞，色彩更蓝更紫 */
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(42, 46, 255, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 微信专供：浓郁渐变按钮 */
-        #wechat-nav {
-            display: none; width: 100%; max-width: 620px;
+        /* 动态网格与星云纹理 */
+        .bg-layers {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .grid-layer {
+            position: absolute; width: 200%; height: 200%;
+            background-image: linear-gradient(45deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: rotate(-15deg) translate(-25%, -25%);
+            animation: gridMove 60s linear infinite;
+        }
+        .nebula-layer {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.04), transparent 40%);
+            filter: blur(60px);
+            animation: nebulaPulse 10s ease-in-out infinite alternate;
+        }
+
+        /* 2. 顶部导航栏：灵动磨砂悬浮 */
+        .nav-bar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding-top: var(--safe-top);
+            z-index: 1000;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            background: rgba(255, 255, 255, 0.12);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .nav-content {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+        }
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .search-icon {
+            width: 24px; height: 24px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat center;
+            opacity: 0.8;
+        }
+
+        /* 3. 资源列表：机能卡片 */
+        .main-container {
+            padding: calc(80px + var(--safe-top)) 18px calc(40px + var(--safe-bottom));
+        }
+        .file-list {
+            list-style: none; margin: 0; padding: 0;
+        }
+        .file-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 16px rgba(124, 58, 237, 0.15);
+            transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+            overflow: hidden;
+            opacity: 0; /* JS触发进入 */
+            transform: translateY(20px);
+        }
+        /* 卡片装饰 */
+        .file-item::before {
+            content: "◆"; position: absolute; top: 12px; color: var(--ipurple);
+            font-size: 10px; opacity: 0.15; filter: drop-shadow(0 0 5px var(--ipurple));
+        }
+        .file-item::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.08), transparent);
+            pointer-events: none;
+        }
+        
+        /* 资源名称 */
+        .file-name {
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: 1px;
             margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(255,255,255,0.1);
+        }
+
+        /* 4. 极速发光按钮 */
+        .download-btn {
+            width: 75%;
+            height: 52px;
+            background: linear-gradient(135deg, var(--eblue), var(--ipurple));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .download-btn::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+        }
+
+        /* 5. 交互动效 */
+        .file-item:active {
+            transform: scale(0.97) translateY(4px);
+            box-shadow: 0 4px 8px rgba(124, 58, 237, 0.1);
+        }
+        .download-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* 扫光动效 */
+        @keyframes scan {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+        .btn-loading::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 40%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: scan 1s infinite;
+        }
+
+        /* 极简剑形水印 */
+        .watermark {
+            position: fixed;
+            top: 20%; right: -10px;
+            font-size: 80px;
+            opacity: 0.05;
+            pointer-events: none;
+            transform: rotate(15deg);
+            z-index: -1;
+            user-select: none;
+        }
+
+        /* 动画定义 */
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+        @keyframes nebulaPulse {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+        }
+        .fade-in-up {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--eblue), var(--ipurple));
+            border-radius: 10px;
+            box-shadow: 0 0 5px var(--eblue);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layers">
+        <div class="grid-layer"></div>
+        <div class="nebula-layer"></div>
+    </div>
+
+    <div class="watermark">🗡️</div>
+
+    <header class="nav-bar">
+        <div class="nav-content">
+            <div class="nav-title">青莲剑客下载站</div>
+            <div class="search-icon" id="searchBtn"></div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <ul class="file-list" id="fileList">
+            <!-- 由 JS 生成内容 -->
+        </ul>
+    </main>
+
+    <script>
+        // ==========================================
+        //  配置区域：个人信息与高速链接
+        // ==========================================
+        const files = [
+            { name: "LCD12864手册带字库", link: "./LCD12864手册带字库.pdf" },
+            { name: "Visual C++6.0", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/VC6.0/Visual.C++6.0.zip" },
+            { name: "STM32入门资料", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/STM32/STM32.zip" },
+            { name: "OpenSpeedy", link: "https://myproxy.060829.xyz/https://github.com/qinglianjianke/qinglianjianke3/releases/download/OpenSpeedy/OpenSpeedy.zip" }
+        ];
+
+        const listContainer = document.getElementById('fileList');
+
+        // 生成列表并绑定动效
+        files.forEach((file, index) => {
+            const li = document.createElement('li');
+            li.className = 'file-item';
+            
+            li.innerHTML = `
+                <div class="file-name">${file.name}</div>
+                <a href="${file.link}" class="download-btn" target="_blank" onclick="onDownloadClick(this)">DOWNLOAD</a>
+            `;
+            listContainer.appendChild(li);
+
+            // 视口进入动画（呼吸感加载）
+            setTimeout(() => {
+                li.classList.add('fade-in-up');
+            }, 150 + (index * 100));
+        });
+
+        // 点击交互反馈
+        function onDownloadClick(btn) {
+            btn.classList.add('btn-loading');
+            btn.innerText = 'DOWNLOADING...';
+            
+            // 微信环境处理 (保持原有引导逻辑的可扩展性)
+            const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+            if (isWechat) {
+                // 如果需要微信引导，可在此处加入之前写的弹窗逻辑
+            }
+
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+                btn.innerText = 'COMPLETED';
+                btn.style.background = 'linear-gradient(135deg, #059669, #10B981)'; // 低饱和青绿反馈
+            }, 3000);
+        }
+
+        // 导航栏滚动交互
+        window.onscroll = function() {
+            const nav = document.querySelector('.nav-bar');
+            if (window.pageYOffset > 20) {
+                nav.style.background = 'rgba(255, 255, 255, 0.2)';
+                nav.style.borderBottom = '1px solid rgba(37, 99, 235, 0.4)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.12)';
+                nav.style.borderBottom = '1px solid rgba(37, 99, 235, 0.2)';
+            }
+        };
+    </script>
+</body>
+</html>            margin-bottom: 25px;
             animation: slideDown 0.4s ease;
         }
         .share-btn {
